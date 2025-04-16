@@ -1,0 +1,332 @@
+{% extends '../base/index.html' %}
+{% load static %}
+
+{% block title %}
+Dashboard - MORI
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/social.css' %}">
+
+<section class="bg-white home-component">
+
+    {% include '../header/index.html' %}
+
+    <div class="wrap-post">
+        <!-- Nếu không có bài đăng, sẽ hiển thị hình ảnh mặc định -->
+        <div class="default-img-not-data text-center">
+            <img src="{% static 'default/no_folder.png' %}" alt="Không có dữ liệu" class="img-fluid">
+            <p class="text-muted">Hiện tại không có ảnh nào.</p>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        const wrapPost = document.querySelector(".wrap-post");
+        let isFetching = false;
+
+        // Ngưỡng số comment hiển thị ban đầu
+        const threshold = 5;
+
+        async function fetchPublicPhotos() {
+            try {
+                const response = await fetch('/photo-public/', {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const photos = await response.json();
+                return photos;
+            } catch (error) {
+                console.error("Lỗi khi tải ảnh công khai:", error);
+                return [];
+            }
+        }
+
+        function renderPhotos(photos, append = false) {
+            if (!append) {
+                wrapPost.innerHTML = "";
+            }
+
+            {% comment %} console.log(photos);
+            console.log(typeof photos);
+
+            if (photos.length === 0) {
+                wrapPost.innerHTML = `
+                    <div class="default-img-not-data text-center">
+                        <img src="{% static '/default/no_folder.png' %}" alt="Không có dữ liệu" class="img-fluid">
+                        <p class="text-muted">Hiện tại không có ảnh nào.</p>
+                    </div>
+                `;
+                return;
+            } {% endcomment %}
+
+            photos?.forEach(photo => {
+                const postEl = document.createElement("div");
+                postEl.classList.add("post");
+                postEl.innerHTML = `
+                    <div class="post-card" photo-id="${photo.id_photo}">
+                        <div class="post-header" photo-id="${photo.id_photo}">
+                            <img src="${photo.uploaded_by.avatar || '/store/avatar/default.jpg'}" alt="User">
+                            <div class="post-info">
+                                <h6 class="mb-0">${photo.uploaded_by.name}</h6>
+                                <small>${new Date(photo.created_at).toLocaleString()}</small>
+                            </div>
+                        </div>
+                        <p class="post-description">${photo.description || "Không có mô tả."}</p>
+                        <img src="${photo.photo_path || '{% static "default/no_image.png" %}'}" 
+                             alt="Design" class="photo-image" style="cursor: pointer;">
+                        <div class="post-actions">
+                            <div>
+                                <span class="count-likes" style="cursor: pointer; color: black; margin-right: 5px;">${photo.like_count || 0}</span>
+                                <i class="fas fa-heart"></i>
+                            </div>
+
+                            <span class="count-comments" style="cursor: pointer; color: black; margin-right: 5px;">${photo.comments.length || 0} ${photo.comments.length > 1 ? "comments" : "comment" }</span>
+                        </div>
+                        <div class="post-comments">
+                            <div class="comments-list">
+                                <!-- Vùng hiển thị comment -->
+                            </div>
+                            <!-- Nút xem thêm comment để riêng, luôn nằm dưới -->
+                            <a href="#" class="view-more-comments" style="display: none;">Xem thêm comment</a>
+
+                            <div class="comment-form">
+                                <div class="px-1 py-2">
+                                    <img class="img-chat" id="profile-avatar" src="${localStorage.getItem('avatar') || '/store/avatar/default.jpg'}" alt="User">
+                                </div>
+                                <input type="text" class="comment-input" placeholder="Nhập comment..." />
+                                <button class="comment-submit">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+
+
+
+
+
+                // Lấy vùng comments-list và nút view-more
+                const commentsList = postEl.querySelector('.comments-list');
+                const viewMoreBtn = postEl.querySelector('.view-more-comments');
+
+                // Render comment, ẩn comment vượt quá threshold
+                if (photo.comments && photo.comments.length > 0) {
+                    photo.comments.forEach((comment, index) => {
+                        const commentEl = document.createElement("div");
+                        commentEl.classList.add("comment");
+                        commentEl.textContent = comment.content;
+
+                        // add p 
+                        const p = document.createElement("p");
+                        p.classList.add("comment-date");
+                        p.textContent = comment.created_at;
+
+                        commentEl.appendChild(p);
+                        
+                        // Ẩn comment nếu vượt quá threshold
+                        if (index >= threshold) {
+                            commentEl.style.display = "none";
+                        }
+                        commentsList.appendChild(commentEl);
+                    });
+
+                    // Nếu số comment vượt threshold thì hiển thị nút "Xem thêm"
+                    if (photo.comments.length > threshold) {
+                        viewMoreBtn.style.display = "flex";
+                    }
+                }
+
+                // Xử lý click vào nút xem thêm comment
+                viewMoreBtn.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    const commentEls = commentsList.querySelectorAll(".comment");
+                    // Kiểm tra xem có comment nào đang ẩn không
+                    let hiddenExists = false;
+                    commentEls.forEach((el, idx) => {
+                        if (idx >= threshold && el.style.display === "none") {
+                            hiddenExists = true;
+                        }
+                    });
+
+                    if (hiddenExists) {
+                        // Hiện tất cả comment sau threshold
+                        commentEls.forEach((el, idx) => {
+                            if (idx >= threshold) {
+                                el.style.display = "flex";
+                            }
+                        });
+                        viewMoreBtn.textContent = "Ẩn bớt comment";
+                    } else {
+                        // Ẩn lại các comment sau threshold
+                        commentEls.forEach((el, idx) => {
+                            if (idx >= threshold) {
+                                el.style.display = "none";
+                            }
+                        });
+                        viewMoreBtn.textContent = "Xem thêm comment";
+                    }
+                });
+
+                // Sử dụng click event với logic double-click custom cho ảnh
+                const imgEl = postEl.querySelector('.photo-image');
+                imgEl.addEventListener("click", function (e) {
+                    if (!imgEl.dataset.lastClickTime) {
+                        imgEl.dataset.lastClickTime = Date.now();
+                    } else {
+                        const diff = Date.now() - parseInt(imgEl.dataset.lastClickTime);
+                        if (diff < 800) {
+                            createHeart(e, postEl);
+                            handleLike(photo, postEl);
+                            delete imgEl.dataset.lastClickTime;
+                        } else {
+                            imgEl.dataset.lastClickTime = Date.now();
+                        }
+                    }
+                });
+
+                // Xử lý gửi comment mới: hỗ trợ ấn Enter và click nút gửi
+                const commentInput = postEl.querySelector('.comment-input');
+                const commentSubmit = postEl.querySelector('.comment-submit');
+
+                commentSubmit.addEventListener("click", async function () {
+                    const commentText = commentInput.value.trim();
+                    if (commentText !== "") {
+                        await submitComment(photo, commentText, postEl);
+                        commentInput.value = "";
+                    }
+                });
+                commentInput.addEventListener("keyup", async function(e) {
+                    if (e.key === "Enter") {
+                        const commentText = commentInput.value.trim();
+                        if (commentText !== "") {
+                            await submitComment(photo, commentText, postEl);
+                            commentInput.value = "";
+                        }
+                    }
+                });
+
+                wrapPost.appendChild(postEl);
+            });
+        }
+
+        async function loadPhotos(append = false) {
+            if (isFetching) return;
+            isFetching = true;
+            const photos = await fetchPublicPhotos();
+            renderPhotos(photos, append);
+            isFetching = false;
+        }
+
+        // Hàm xử lý like (gọi API và cập nhật giao diện)
+        async function handleLike(photo, postEl) {
+            const likeCountEl = postEl.querySelector('.count-likes');
+            let count = parseInt(likeCountEl.textContent) || 0;
+            count += 1;
+            likeCountEl.textContent = count;
+
+            try {
+                const response = await fetch('/like/', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': `Token ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ photos: [ photo.id_photo ] })
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to update like');
+                }
+            } catch (error) {
+                console.error("Lỗi khi cập nhật like:", error);
+            }
+        }
+
+        // Hàm xử lý gửi comment mới (chỉ hỗ trợ comment cấp 1)
+        async function submitComment(photo, commentText, postEl) {
+            try {
+                const response = await fetch('/comments/photo/', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': `Token ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id_photo: photo.id_photo,
+                        content: commentText,
+                        id_parent: 0
+                    })
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to submit comment');
+                }
+                const newComment = await response.json();
+                
+                // Thêm comment mới vào danh sách
+                const commentsList = postEl.querySelector('.comments-list');
+                const viewMoreBtn = postEl.querySelector('.view-more-comments');
+                const commentEl = document.createElement('div');
+                const p = document.createElement('p');
+                p.classList.add("comment-date");
+                p.textContent = "Vừa xong";
+                commentEl.classList.add('comment');
+                commentEl.textContent = newComment.content || commentText;
+                commentEl.appendChild(p);
+                commentsList.appendChild(commentEl);
+
+                const countCommentEl = postEl.querySelector('.count-comments');
+                let count = parseInt(countCommentEl.textContent) || 0;
+                count += 1;
+                countCommentEl.textContent = count + " " + (count > 1 ? "comments" : "comment");
+
+
+
+                // Cập nhật hiển thị nút viewMore
+                const totalCommentEls = commentsList.querySelectorAll('.comment').length;
+                if (totalCommentEls > threshold) {
+                    viewMoreBtn.style.display = "block";
+                } else {
+                    viewMoreBtn.style.display = "none";
+                }
+            } catch (error) {
+                console.error("Lỗi khi gửi comment:", error);
+            }
+        }
+
+        // Hàm tạo hiệu ứng trái tim tại vị trí click
+        function createHeart(e, postEl) {
+            const heart = document.createElement('i');
+            heart.classList.add('fas', 'fa-heart');
+            const container = postEl.querySelector('.post-card');
+            const rect = container.getBoundingClientRect();
+            const xInside = e.clientX - rect.left;
+            const yInside = e.clientY - rect.top;
+            heart.style.position = "absolute";
+            heart.style.top = `${yInside}px`;
+            heart.style.left = `${xInside}px`;
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 1000);
+        }
+
+        loadPhotos();
+
+        wrapPost.addEventListener("scroll", async function () {
+            if (wrapPost.scrollTop + wrapPost.clientHeight >= wrapPost.scrollHeight - 100) {
+                await loadPhotos(true);
+            }
+        });
+    });
+    </script>
+
+</section>
+
+{% endblock %}
