@@ -158,11 +158,7 @@
                 <h3 class="section-title">Lịch sử gần đây</h3>
 
                 <ul class="design-list" id="designList">
-                    {% comment %} <li class="design-item">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVhsoYsUszzdWvBzAaK8kMYg1oqbjTnR-ZdQ&s"
-                            alt="Logo Mori" class="design-img">
-                        <span class="design-name">Logo-Mori</span>
-                    </li> {% endcomment %}
+
                 </ul>
 
                 <a href="#" class="view-all" id="viewAllBtn">Xem tất cả</a>
@@ -311,15 +307,15 @@
             const wrapContent = document.querySelector('.section-history');
             const historyContainer = document.getElementById('designList');
             const defaultImageContainer = document.getElementById('default-img');
+            wrapContent.style.display = 'none';
 
-
-
-
-            if (data.length === 0) {
+            if (data.length === 0 || data === null) {
                 defaultImageContainer.style.display = 'block';
                 wrapContent.style.display = 'none';
-                {% comment %} defaultImageContainer.insertAdjacentHTML('beforeend', '<p class="text-muted">Không có dữ liệu</p>'); {% endcomment %}
+                console.log("không cps data history");
             } else {
+                wrapContent.style.display = 'block';
+
                 data.forEach(item => {
                     const card = document.createElement('li');
                     card.classList.add('design-item');
@@ -386,13 +382,47 @@
 </script>
 
 <script>
+    // Toggle khi click
     document.getElementById('sidebarToggle').addEventListener('click', function () {
-        document.querySelector('.sidebar').classList.toggle('active');
-        document.querySelector('.sidebar-router').classList.toggle('col-3');
-        document.querySelector('.sidebar-option').classList.toggle('hidden');
-        document.querySelector('.sidebar-wrap').classList.toggle('hidden_sidebar');
-        document.querySelector('.content-wrap').classList.toggle('hidden_sidebar_content');
-        
+        const sidebar = document.querySelector('.sidebar');
+        const router = document.querySelector('.sidebar-router');
+        const option = document.querySelector('.sidebar-option');
+        const wrap = document.querySelector('.sidebar-wrap');
+        const content = document.querySelector('.content-wrap');
 
+        // Toggle class
+        sidebar.classList.toggle('active');
+        router.classList.toggle('col-3');
+        option.classList.toggle('hidden');
+        wrap.classList.toggle('hidden_sidebar');
+        content.classList.toggle('hidden_sidebar_content');
+
+        // Sau khi toggle xong thì kiểm tra trạng thái mới và lưu vào localStorage
+        const isNowActive = sidebar.classList.contains('active');
+        localStorage.setItem('sidebarActive', isNowActive ? 'true' : 'false');
+    });
+
+    // Khôi phục trạng thái khi reload
+    window.addEventListener('DOMContentLoaded', function () {
+        const isActive = localStorage.getItem('sidebarActive') === 'true';
+        const sidebar = document.querySelector('.sidebar');
+        const router = document.querySelector('.sidebar-router');
+        const option = document.querySelector('.sidebar-option');
+        const wrap = document.querySelector('.sidebar-wrap');
+        const content = document.querySelector('.content-wrap');
+
+        if (isActive) {
+            sidebar.classList.add('active');
+            router.classList.add('col-3');
+            option.classList.remove('hidden');
+            wrap.classList.remove('hidden_sidebar');
+            content.classList.remove('hidden_sidebar_content');
+        } else {
+            sidebar.classList.remove('active');
+            router.classList.remove('col-3');
+            option.classList.add('hidden');
+            wrap.classList.add('hidden_sidebar');
+            content.classList.add('hidden_sidebar_content');
+        }
     });
 </script>

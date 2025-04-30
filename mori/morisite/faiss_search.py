@@ -62,7 +62,7 @@ class FaissSearch:
             faiss_id_public__in=photo_ids,
             is_public=True,
             is_deleted=False
-        )
+        ).reverse()
         return PhotoCommunitySerializer(photos, many=True).data
 
     def _get_photos_from_indices_for_user(self, indices):
@@ -71,7 +71,7 @@ class FaissSearch:
             faiss_id__in=photo_ids,
             album__user=self.user,
             is_deleted=False
-        ).values('id_photo', 'photo', 'name', 'description', 'location','tags', 'colors', 'objects_photo','caption', 'is_favorited', 'like_count', 'is_public', 'created_at','updated_at', 'album__id_album', 'album__title', 'album__description', 'album__is_main')
+        ).values('id_photo', 'photo', 'name', 'description', 'location','tags', 'colors', 'objects_photo','caption', 'is_favorited', 'like_count', 'is_public', 'created_at','updated_at', 'album__id_album', 'album__title', 'album__description', 'album__is_main').reverse()
 
     # 🔥 Tìm kiếm theo user
     def search_for_user(self, query, mode="text", k=5):

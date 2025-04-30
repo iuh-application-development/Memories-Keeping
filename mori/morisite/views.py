@@ -132,26 +132,27 @@ class LoginView(KnoxLoginView):
         },
     )
     def post(self, request, *args, **kwargs):
-            if User.objects.filter(email=request.data['username']).exists():
-                data = User.objects.get(email=request.data['username'])
-                
-                if data.is_email:
-                    return Response({"error": "Tài khoản này chỉ đăng nhập bằng google."}, status=status.HTTP_400_BAD_REQUEST)
-                # if not data.email.endswith('@gmail.com'):
-                #     return Response({"error": "Tài khoản chỉ hỗ trợ đăng nhập bằng gmail."}, status=status.HTTP_400_BAD_REQUEST)
-                serializer = AuthTokenSerializer(data=request.data)
-                serializer.is_valid(raise_exception=True)
-                user = serializer.validated_data['user']
+        if User.objects.filter(email=request.data['username']).exists():
+            data = User.objects.get(email=request.data['username'])
+            
+            if data.is_email:
+                return Response({"error": "Tài khoản này chỉ đăng nhập bằng google."}, status=status.HTTP_400_BAD_REQUEST)
+            # if not data.email.endswith('@gmail.com'):
+            #     return Response({"error": "Tài khoản chỉ hỗ trợ đăng nhập bằng gmail."}, status=status.HTTP_400_BAD_REQUEST)
+            serializer = AuthTokenSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.validated_data['user']
 
-                login(request, user)
-                _, token = AuthToken.objects.create(user)
-                data = {
-                    "message": "Đăng nhập thành công!",
-                    "token": token
-                }
-                return Response(data, status=status.HTTP_200_OK)
-            else:
-                return Response({"error": "Tài khoản không tồn tại."}, status=status.HTTP_400_BAD_REQUEST)
+            login(request, user)
+            _, token = AuthToken.objects.create(user)
+            data = {
+                "message": "Đăng nhập thành công!",
+                "token": token
+            }
+            print("đăng nhập thành công thong qua gmail")
+            return Response(data, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Tài khoản không tồn tại."}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserRegistrationView(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -1710,7 +1711,7 @@ class NotificationView(APIView):
     )
     def get(self, request):
         user = request.user
-        notifications = Notification.objects.filter(recipient=user)
+        notifications = Notification.objects.filter(recipient=user).order_by('-created_at')
         serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     

@@ -24,7 +24,6 @@ urlpatterns = [
    # ui
    path("", redirect_landing, name='landing'),
    
-   
    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
    
@@ -126,21 +125,6 @@ urlpatterns = [
    path('notifications/', NotificationView.as_view(), name='notification-view'),
    path('notifications/<int:pk>', NotificationDetailView.as_view(), name='notification-view'),
 
-   # admin 
-   # xem danh sach user đã đăng ký  ok
-   # chỉnh sua thong tin user (tên, quyền hạn)  ok
-   # xóa usẻ khỏi hệ thông  ok
-
-   # xem tất cả các canh dược upload trong ngày dạng công khai trong ngày ok
-   # chinh sua hoac go bo thong tin mô ta nếu có ngôn từ nhạy cảm xóa anh chuyen ve private  ok
-
-   # xem tông số anh dược public mõi ngày  ok
-   # xem tổng số usẻ được đăng ký trong ngày ok
-   # kiểm tra số lượng lịch sử tìm kiếm của user tạo ra ok 
-   # kiểm tra số lượng tìm kiếm AI của user đã được thực hiện trong ngày ok
-   # chinh sửa hoạt xóa kết quả tìm kiếm nhạy cảm ok
-
-   # thay doi mk ok
    # change password
    path('change-password/', ChangePasswordView.as_view(), name='change-password'),
    

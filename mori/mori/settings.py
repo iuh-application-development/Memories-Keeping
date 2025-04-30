@@ -15,7 +15,10 @@ from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
 import faiss
-load_dotenv()
+
+env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
+load_dotenv(dotenv_path=env_path)
+# load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -245,10 +248,11 @@ ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 ACCOUNT_SIGNUP_REDIRECT_URL = "/page/home" 
 ACCOUNT_LOGOUT_REDIRECT_URL = "/page/login" 
 ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_LOGIN_REDIRECTS = True
 
 LOGIN_REDIRECT_URL = "/page/home"
 LOGIN_URL = "/page/login"
@@ -267,3 +271,10 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 SOCIALACCOUNT_AUTO_SIGNUP = True
 ACCOUNT_SIGNUP_AUTO_LINK = True
+
+# send_mail(
+#     subject='Test Email từ Django',
+#     message='Đây là email test từ Django SMTP Gmail Mori super search image.',
+#     from_email='xndien2004@gmail.com',  
+#     recipient_list=['taochoi453@gmail.com']  
+# )

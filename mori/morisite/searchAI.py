@@ -181,4 +181,4 @@ class SearchPhotosForUserAI(BaseSearchPhotosAI):
     )
     def post(self, request):
         """API tìm kiếm ảnh dành cho người dùng (chỉ ảnh thuộc sở hữu của user)"""
-        return super().post(request)  # Gọi lại `post` từ `BaseSearchPhotosAI`
+        return super().post(request)

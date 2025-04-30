@@ -86,7 +86,7 @@
                         <span class="text-sm">Đăng nhập bằng Google</span>
                     </a>
                 </div>
-            </form>
+            </form> 
         </div>
     </div>
     <div id="errorMessage" class="text-red-500 mt-4 text-center hidden">
@@ -95,6 +95,7 @@
     
     
     <script>
+    localStorage.setItem('sidebarActive', 'true'); // Đặt mặc định là true
 
     document.getElementById('loginForm').addEventListener('submit', async (event) => {
         event.preventDefault();

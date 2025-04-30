@@ -1,0 +1,34 @@
+services:
+  mori_search:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mori_search
+    depends_on:
+      - mori_db
+    # restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/mori_super_search
+
+  mori_db:
+    image: postgres:17.0
+    container_name: mori_db
+    env_file:
+      - .env
+    volumes:
+      - ./mori/db_mori/data:/var/lib/postgresql/data
+      - ./mori/db_mori/schemas/mori.sql:/docker-entrypoint-initdb.d/mori.sql:ro
+    restart: unless-stopped
+    ports:
+      - "5435:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+volumes:
+  db_mori:
+    driver: local

@@ -55,7 +55,25 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .img-chat-comment {
+    margin-top: 0 !important;
+  }
   
+
+  .comment-body {
+    height: 100% !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .comment-body span {
+    margin: 0 10px !important;
+  }
+
+
 .comment-date {
     font-size: 0.6rem !important;
     color: #999;

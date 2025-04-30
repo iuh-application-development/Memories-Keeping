@@ -52,9 +52,7 @@ Dashboard - MORI
                 wrapPost.innerHTML = "";
             }
 
-            {% comment %} console.log(photos);
-            console.log(typeof photos);
-
+            {% comment %}
             if (photos.length === 0) {
                 wrapPost.innerHTML = `
                     <div class="default-img-not-data text-center">
@@ -71,7 +69,7 @@ Dashboard - MORI
                 postEl.innerHTML = `
                     <div class="post-card" photo-id="${photo.id_photo}">
                         <div class="post-header" photo-id="${photo.id_photo}">
-                            <img src="${photo.uploaded_by.avatar || '/store/avatar/default.jpg'}" alt="User">
+                            <img src="${photo.uploaded_by.avatar || '/store/avatar/default_image/default.jpg'}" alt="User">
                             <div class="post-info">
                                 <h6 class="mb-0">${photo.uploaded_by.name}</h6>
                                 <small>${new Date(photo.created_at).toLocaleString()}</small>
@@ -97,7 +95,7 @@ Dashboard - MORI
 
                             <div class="comment-form">
                                 <div class="px-1 py-2">
-                                    <img class="img-chat" id="profile-avatar" src="${localStorage.getItem('avatar') || '/store/avatar/default.jpg'}" alt="User">
+                                    <img class="img-chat" id="profile-avatar" src="${localStorage.getItem('avatar') || '/store/avatar/default_image/default.jpg'}" alt="User">
                                 </div>
                                 <input type="text" class="comment-input" placeholder="Nhập comment..." />
                                 <button class="comment-submit">
@@ -120,21 +118,59 @@ Dashboard - MORI
                 // Render comment, ẩn comment vượt quá threshold
                 if (photo.comments && photo.comments.length > 0) {
                     photo.comments.forEach((comment, index) => {
-                        const commentEl = document.createElement("div");
-                        commentEl.classList.add("comment");
-                        commentEl.textContent = comment.content;
+                        // Tạo phần tử comment
+                        const commentEl = document.createElement('div');
+                        commentEl.classList.add('comment');
+                        commentEl.style.display = 'flex';
+                        commentEl.style.alignItems = 'flex-start';
 
-                        // add p 
-                        const p = document.createElement("p");
+                        // Avatar
+                        const avatar = document.createElement('img');
+                        avatar.classList.add('img-chat-comment');
+                        avatar.src = comment.user?.avatar || '/store/avatar/default_image/default.jpg';
+                        avatar.alt = 'User';
+                        avatar.style.width = '20px';
+                        avatar.style.height = '20px';
+                        avatar.style.borderRadius = '50%';
+
+                        // Nội dung bình luận
+                        const commentBody = document.createElement('div');
+                        commentBody.classList.add('comment-body');
+
+                        // Tên người dùng
+                        const userName = document.createElement('h6');
+                        userName.textContent = comment.user?.name || 'Ẩn danh';
+                        userName.style.margin = 0;
+
+                        // Nội dung
+                        const contentSpan = document.createElement('span');
+                        contentSpan.textContent = comment.content || '';
+                        contentSpan.style.display = 'block';
+                        contentSpan.style.margin = '2px 0';
+
+                        // Thời gian
+                        const p = document.createElement('p');
                         p.classList.add("comment-date");
-                        p.textContent = comment.created_at;
+                        p.textContent = comment.created_at || 'Không rõ thời gian';
+                        p.style.fontSize = '12px';
+                        p.style.color = 'gray';
+                        p.style.margin = 0;
 
-                        commentEl.appendChild(p);
-                        
-                        // Ẩn comment nếu vượt quá threshold
+                        // Gắn các phần vào commentBody
+                        commentBody.appendChild(userName);
+                        commentBody.appendChild(contentSpan);
+                        commentBody.appendChild(p);
+
+                        // Gắn avatar và nội dung vào comment
+                        commentEl.appendChild(avatar);
+                        commentEl.appendChild(commentBody);
+
+                        // Ẩn nếu vượt quá threshold
                         if (index >= threshold) {
-                            commentEl.style.display = "none";
+                            commentEl.style.display = 'none';
                         }
+
+                        // Thêm vào danh sách
                         commentsList.appendChild(commentEl);
                     });
 
@@ -274,14 +310,61 @@ Dashboard - MORI
                 // Thêm comment mới vào danh sách
                 const commentsList = postEl.querySelector('.comments-list');
                 const viewMoreBtn = postEl.querySelector('.view-more-comments');
+
+                // Khung bình luận
                 const commentEl = document.createElement('div');
+                commentEl.classList.add('comment');
+                commentEl.style.display = 'flex';
+                commentEl.style.alignItems = 'flex-start';
+                {% comment %} commentEl.style.marginBottom = '10px'; {% endcomment %}
+
+                // Avatar
+                const avatar = document.createElement('img');
+                avatar.classList.add('img-chat-comment');
+                avatar.src = localStorage.getItem("avatar") || '/store/avatar/default_image/default.jpg';
+                avatar.alt = 'User';
+                avatar.style.width = '20px';
+                avatar.style.height = '20px';
+                avatar.style.borderRadius = '50%';
+                {% comment %} avatar.style.marginRight = '10px'; {% endcomment %}
+
+                // Phần nội dung bên phải avatar
+                const commentBody = document.createElement('div');
+                commentBody.classList.add('comment-body');
+                
+
+                // Tên người dùng
+                const userName = document.createElement('h6');
+                userName.textContent = newComment.user?.name || 'Ẩn danh';
+                userName.style.margin = 0;
+
+                // Nội dung bình luận
+                const contentSpan = document.createElement('span');
+                contentSpan.textContent = newComment.content || commentText;
+                contentSpan.style.display = 'block';
+                contentSpan.style.margin = '2px 0';
+
+                // Thời gian
                 const p = document.createElement('p');
                 p.classList.add("comment-date");
                 p.textContent = "Vừa xong";
-                commentEl.classList.add('comment');
-                commentEl.textContent = newComment.content || commentText;
-                commentEl.appendChild(p);
+                p.style.fontSize = '12px';
+                p.style.color = 'gray';
+                p.style.margin = 0;
+
+                // Gắn các phần vào commentBody
+                commentBody.appendChild(userName);
+                commentBody.appendChild(contentSpan);
+                commentBody.appendChild(p);
+
+                // Gắn avatar và commentBody vào commentEl
+                commentEl.appendChild(avatar);
+                commentEl.appendChild(commentBody);
+
+                // Thêm vào danh sách
                 commentsList.appendChild(commentEl);
+
+
 
                 const countCommentEl = postEl.querySelector('.count-comments');
                 let count = parseInt(countCommentEl.textContent) || 0;

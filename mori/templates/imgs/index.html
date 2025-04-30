@@ -22,7 +22,6 @@ Dashboard - MORI
         </div>
 
         <div class="design-section row mt-2 px-2" id="design-list">
-            <!-- Dynamically generated content will go here -->
         </div>
 
         <div class="default-img-not-data row mt-2 px-2 text-center" id="default-img" style="display: none;">
@@ -103,6 +102,10 @@ Dashboard - MORI
 
             // Hide the default image if data is found
             defaultImageContainer.style.display = 'none';
+
+            if (data === null || data === undefined || data.length === 0) {
+                
+            }
 
             // Loop through the results and display them
             data.forEach(photo => {
