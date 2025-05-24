@@ -1,5 +1,7 @@
 # Memories-Keeping
+
 **Memories-Keeping** là một nền tảng web giúp người dùng lưu giữ, quản lý và chia sẻ các khoảnh khắc đáng nhớ dưới dạng hình ảnh và văn bản. Ứng dụng tích hợp trí tuệ nhân tạo để hỗ trợ tìm kiếm ảnh thông minh, đồng thời mang đến trải nghiệm tương tác cộng đồng hiện đại và an toàn.
+
 ---
 ## Mô tả đề tài
 ### 1. Mô tả tổng quan
@@ -97,32 +99,23 @@ docker compose up -d --build
 
 ## Screenshots
 
-### 1. Các giao diện chính: đăng nhập, đăng ký, landing page, quên mật khẩu, trang cá nhân
+### 1. Các giao diện chính: Đăng nhập, Đăng ký, Landing Page, Quên mật khẩu, Trang cá nhân
 
 <div align="center">
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/landing_pages.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Landing Page</figcaption>
-  </figure>
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/login.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Đăng nhập</figcaption>
-  </figure>
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/register.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Đăng ký</figcaption>
-  </figure>
-</div>
-
-<div align="center">
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/quen_mat_khau.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Quên mật khẩu</figcaption>
-  </figure>
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/trang_ca_nhan.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Trang cá nhân</figcaption>
-  </figure>
+  <img src="./images/landing_pages.jpg" width="250px"><br>
+  <em style="color: gray;">Landing Page</em>
+  <br><br>
+  <img src="./images/login.jpg" width="250px"><br>
+  <em style="color: gray;">Đăng nhập</em>
+  <br><br>
+  <img src="./images/register.jpg" width="250px"><br>
+  <em style="color: gray;">Đăng ký</em>
+  <br><br>
+  <img src="./images/quen_mat_khau.jpg" width="250px"><br>
+  <em style="color: gray;">Quên mật khẩu</em>
+  <br><br>
+  <img src="./images/trang_ca_nhan.jpg" width="250px"><br>
+  <em style="color: gray;">Trang cá nhân</em>
 </div>
 
 ---
@@ -130,10 +123,8 @@ docker compose up -d --build
 ### 2. Tổng quan trang chủ
 
 <div align="center">
-  <figure>
-    <img src="./images/home_after_login.jpg" width="90%">
-    <figcaption style="color: gray; font-style: italic;">Trang chủ sau khi đăng nhập</figcaption>
-  </figure>
+  <img src="./images/home_after_login.jpg" width="90%"><br>
+  <em style="color: gray;">Trang chủ sau khi đăng nhập</em>
 </div>
 
 ---
@@ -141,14 +132,11 @@ docker compose up -d --build
 ### 3. Quản lý ảnh
 
 <div align="center">
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/quan_ly_album_vs_anh.jpg" width="300px">
-    <figcaption style="color: gray; font-style: italic;">Tổng quan ảnh và album</figcaption>
-  </figure>
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/quan_ly_anh.jpg" width="300px">
-    <figcaption style="color: gray; font-style: italic;">Giao diện quản lý ảnh</figcaption>
-  </figure>
+  <img src="./images/quan_ly_album_vs_anh.jpg" width="300px"><br>
+  <em style="color: gray;">Tổng quan ảnh và album</em>
+  <br><br>
+  <img src="./images/quan_ly_anh.jpg" width="300px"><br>
+  <em style="color: gray;">Giao diện quản lý ảnh</em>
 </div>
 
 ---
@@ -156,14 +144,11 @@ docker compose up -d --build
 ### 4. Quản lý album
 
 <div align="center">
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/quan_ly_album.jpg" width="300px">
-    <figcaption style="color: gray; font-style: italic;">Danh sách album</figcaption>
-  </figure>
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/quan_ly_album_tao_album.jpg" width="300px">
-    <figcaption style="color: gray; font-style: italic;">Tạo album mới</figcaption>
-  </figure>
+  <img src="./images/quan_ly_album.jpg" width="300px"><br>
+  <em style="color: gray;">Danh sách album</em>
+  <br><br>
+  <img src="./images/quan_ly_album_tao_album.jpg" width="300px"><br>
+  <em style="color: gray;">Tạo album mới</em>
 </div>
 
 ---
@@ -171,10 +156,8 @@ docker compose up -d --build
 ### 5. Quản lý thùng rác
 
 <div align="center">
-  <figure>
-    <img src="./images/thung_rac.jpg" width="90%">
-    <figcaption style="color: gray; font-style: italic;">Thùng rác – quản lý ảnh đã xóa</figcaption>
-  </figure>
+  <img src="./images/thung_rac.jpg" width="90%"><br>
+  <em style="color: gray;">Thùng rác – quản lý ảnh đã xóa</em>
 </div>
 
 ---
@@ -182,18 +165,14 @@ docker compose up -d --build
 ### 6. Tìm kiếm thông thường/AI, quản lý lịch sử tìm kiếm
 
 <div align="center">
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/tim_kiem_thong_thuong.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Tìm kiếm thông thường</figcaption>
-  </figure>
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/tim_kiem_bang_ai.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Tìm kiếm bằng AI</figcaption>
-  </figure>
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/lich_su_tim_kiem.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Lịch sử tìm kiếm</figcaption>
-  </figure>
+  <img src="./images/tim_kiem_thong_thuong.jpg" width="250px"><br>
+  <em style="color: gray;">Tìm kiếm thông thường</em>
+  <br><br>
+  <img src="./images/tim_kiem_bang_ai.jpg" width="250px"><br>
+  <em style="color: gray;">Tìm kiếm bằng AI</em>
+  <br><br>
+  <img src="./images/lich_su_tim_kiem.jpg" width="250px"><br>
+  <em style="color: gray;">Lịch sử tìm kiếm</em>
 </div>
 
 ---
@@ -201,18 +180,14 @@ docker compose up -d --build
 ### 7. Tương tác cộng đồng (thích, bình luận, thông báo)
 
 <div align="center">
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/tuong_tac_cong_dong.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Danh sách bài đăng</figcaption>
-  </figure>
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/cmt_replycmt_like.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Bình luận, trả lời, thích</figcaption>
-  </figure>
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/thong_bao.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Thông báo tương tác</figcaption>
-  </figure>
+  <img src="./images/tuong_tac_cong_dong.jpg" width="250px"><br>
+  <em style="color: gray;">Danh sách bài đăng</em>
+  <br><br>
+  <img src="./images/cmt_replycmt_like.jpg" width="250px"><br>
+  <em style="color: gray;">Bình luận, trả lời, thích</em>
+  <br><br>
+  <img src="./images/thong_bao.jpg" width="250px"><br>
+  <em style="color: gray;">Thông báo tương tác</em>
 </div>
 
 ---
@@ -220,16 +195,12 @@ docker compose up -d --build
 ### 8. Quản lý thông tin chung
 
 <div align="center">
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/dashboard_admin.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Dashboard Admin</figcaption>
-  </figure>
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/quan_ly_nguoi_dung_admin.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Quản lý người dùng</figcaption>
-  </figure>
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="./images/quan_ly_bai_dang_admin.jpg" width="250px">
-    <figcaption style="color: gray; font-style: italic;">Quản lý bài đăng</figcaption>
-  </figure>
+  <img src="./images/dashboard_admin.jpg" width="250px"><br>
+  <em style="color: gray;">Dashboard Admin</em>
+  <br><br>
+  <img src="./images/quan_ly_nguoi_dung_admin.jpg" width="250px"><br>
+  <em style="color: gray;">Quản lý người dùng</em>
+  <br><br>
+  <img src="./images/quan_ly_bai_dang_admin.jpg" width="250px"><br>
+  <em style="color: gray;">Quản lý bài đăng</em>
 </div>
