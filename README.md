@@ -96,19 +96,140 @@ docker compose up -d --build
 ---
 
 ## Screenshots
-1. Các giao diện chính: đăng nhập, đăng ký, landing page, quên mật khẩu, trang cá nhân
-<div align="center"> <figure style="display: inline-block; margin: 10px;"> <img src="./images/landing_pages.jpg" width="250px"> <figcaption>Landing Page</figcaption> </figure> <figure style="display: inline-block; margin: 10px;"> <img src="./images/login.jpg" width="250px"> <figcaption>Đăng nhập</figcaption> </figure> <figure style="display: inline-block; margin: 10px;"> <img src="./images/register.jpg" width="250px"> <figcaption>Đăng ký</figcaption> </figure> </div> <div align="center"> <figure style="display: inline-block; margin: 10px;"> <img src="./images/quen_mat_khau.jpg" width="250px"> <figcaption>Quên mật khẩu</figcaption> </figure> <figure style="display: inline-block; margin: 10px;"> <img src="./images/trang_ca_nhan.jpg" width="250px"> <figcaption>Trang cá nhân</figcaption> </figure> </div>
-2. Tổng quan trang chủ
-<div align="center"> <figure> <img src="./images/home_after_login.jpg" width="90%"> <figcaption>Trang chủ sau khi đăng nhập</figcaption> </figure> </div>
-3. Quản lý ảnh
-<div align="center"> <figure> <img src="./images/quan_ly_anh.jpg" width="90%"> <figcaption>Giao diện quản lý ảnh</figcaption> </figure> </div>
-4. Quản lý album
-<div align="center"> <figure style="display: inline-block; margin: 10px;"> <img src="./images/quan_ly_album.jpg" width="300px"> <figcaption>Danh sách album</figcaption> </figure> <figure style="display: inline-block; margin: 10px;"> <img src="./images/quan_ly_album_tao_album.jpg" width="300px"> <figcaption>Tạo album mới</figcaption> </figure> </div> 
-5. Quản lý thùng rác
-<div align="center"> <figure> <img src="./images/thung_rac.jpg" width="90%"> <figcaption>Thùng rác – quản lý ảnh đã xóa</figcaption> </figure> </div>
-6. Tìm kiếm thông thường/AI, quản lý lịch sử tìm kiếm
-<div align="center"> <figure style="display: inline-block; margin: 10px;"> <img src="./images/tim_kiem_thong_thuong.jpg" width="250px"> <figcaption>Tìm kiếm thông thường</figcaption> </figure> <figure style="display: inline-block; margin: 10px;"> <img src="./images/tim_kiem_bang_ai.jpg" width="250px"> <figcaption>Tìm kiếm bằng AI</figcaption> </figure> <figure style="display: inline-block; margin: 10px;"> <img src="./images/lich_su_tim_kiem.jpg" width="250px"> <figcaption>Lịch sử tìm kiếm</figcaption> </figure> </div>
-7. Tương tác cộng đồng (thích, bình luận, thông báo)
-<div align="center"> <figure style="display: inline-block; margin: 10px;"> <img src="./images/tuong_tac_cong_dong.jpg" width="250px"> <figcaption>Danh sách bài đăng</figcaption> </figure> <figure style="display: inline-block; margin: 10px;"> <img src="./images/cmt_replycmt_like.jpg" width="250px"> <figcaption>Bình luận, trả lời, thích</figcaption> </figure> <figure style="display: inline-block; margin: 10px;"> <img src="./images/thong_bao.jpg" width="250px"> <figcaption>Thông báo tương tác</figcaption> </figure> </div>
-8. Quản lý thông tin chung
-<div align="center"> <figure style="display: inline-block; margin: 10px;"> <img src="./images/dashboard_admin.jpg" width="250px"> <figcaption>Dashboard Admin</figcaption> </figure> <figure style="display: inline-block; margin: 10px;"> <img src="./images/quan_ly_nguoi_dung_admin.jpg" width="250px"> <figcaption>Quản lý người dùng</figcaption> </figure> <figure style="display: inline-block; margin: 10px;"> <img src="./images/quan_ly_bai_dang_admin.jpg" width="250px"> <figcaption>Quản lý bài đăng</figcaption> </figure> </div>
+
+### 1. Các giao diện chính: đăng nhập, đăng ký, landing page, quên mật khẩu, trang cá nhân
+
+<div align="center">
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/landing_pages.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Landing Page</figcaption>
+  </figure>
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/login.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Đăng nhập</figcaption>
+  </figure>
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/register.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Đăng ký</figcaption>
+  </figure>
+</div>
+
+<div align="center">
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/quen_mat_khau.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Quên mật khẩu</figcaption>
+  </figure>
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/trang_ca_nhan.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Trang cá nhân</figcaption>
+  </figure>
+</div>
+
+---
+
+### 2. Tổng quan trang chủ
+
+<div align="center">
+  <figure>
+    <img src="./images/home_after_login.jpg" width="90%">
+    <figcaption style="color: gray; font-style: italic;">Trang chủ sau khi đăng nhập</figcaption>
+  </figure>
+</div>
+
+---
+
+### 3. Quản lý ảnh
+
+<div align="center">
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/quan_ly_album_vs_anh.jpg" width="300px">
+    <figcaption style="color: gray; font-style: italic;">Tổng quan ảnh và album</figcaption>
+  </figure>
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/quan_ly_anh.jpg" width="300px">
+    <figcaption style="color: gray; font-style: italic;">Giao diện quản lý ảnh</figcaption>
+  </figure>
+</div>
+
+---
+
+### 4. Quản lý album
+
+<div align="center">
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/quan_ly_album.jpg" width="300px">
+    <figcaption style="color: gray; font-style: italic;">Danh sách album</figcaption>
+  </figure>
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/quan_ly_album_tao_album.jpg" width="300px">
+    <figcaption style="color: gray; font-style: italic;">Tạo album mới</figcaption>
+  </figure>
+</div>
+
+---
+
+### 5. Quản lý thùng rác
+
+<div align="center">
+  <figure>
+    <img src="./images/thung_rac.jpg" width="90%">
+    <figcaption style="color: gray; font-style: italic;">Thùng rác – quản lý ảnh đã xóa</figcaption>
+  </figure>
+</div>
+
+---
+
+### 6. Tìm kiếm thông thường/AI, quản lý lịch sử tìm kiếm
+
+<div align="center">
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/tim_kiem_thong_thuong.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Tìm kiếm thông thường</figcaption>
+  </figure>
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/tim_kiem_bang_ai.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Tìm kiếm bằng AI</figcaption>
+  </figure>
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/lich_su_tim_kiem.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Lịch sử tìm kiếm</figcaption>
+  </figure>
+</div>
+
+---
+
+### 7. Tương tác cộng đồng (thích, bình luận, thông báo)
+
+<div align="center">
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/tuong_tac_cong_dong.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Danh sách bài đăng</figcaption>
+  </figure>
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/cmt_replycmt_like.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Bình luận, trả lời, thích</figcaption>
+  </figure>
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/thong_bao.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Thông báo tương tác</figcaption>
+  </figure>
+</div>
+
+---
+
+### 8. Quản lý thông tin chung
+
+<div align="center">
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/dashboard_admin.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Dashboard Admin</figcaption>
+  </figure>
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/quan_ly_nguoi_dung_admin.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Quản lý người dùng</figcaption>
+  </figure>
+  <figure style="display: inline-block; margin: 10px;">
+    <img src="./images/quan_ly_bai_dang_admin.jpg" width="250px">
+    <figcaption style="color: gray; font-style: italic;">Quản lý bài đăng</figcaption>
+  </figure>
+</div>
