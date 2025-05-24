@@ -76,83 +76,6 @@
     <div id="errorMessage" class="text-red-500 mt-4 text-center hidden"></div>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     
-    <!-- <script>
-        document.querySelector('form').addEventListener('submit', async (event) => {
-            event.preventDefault(); // Ngăn hành động submit mặc định của form
-    
-            // Lấy giá trị từ các trường input
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const username = document.getElementById('username').value;
-    
-            // Tạo payload để gửi lên API đăng ký
-            const payload = {
-                name: username,
-                email: email,
-                password: password
-            };
-    
-            console.log('Payload:', payload);
-    
-            // Ẩn các thông báo lỗi cũ trước khi gửi yêu cầu
-            document.getElementById('nameError').classList.add('hidden');
-            document.getElementById('emailError').classList.add('hidden');
-            document.getElementById('passwordError').classList.add('hidden');
-            document.getElementById('errorMessage').classList.add('hidden');
-    
-            try {
-                // Gọi API đăng ký với phương thức POST
-                const response = await fetch('/user/register/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-    
-                // Kiểm tra mã trạng thái HTTP (400, 422,...)
-                if (!response.ok) {
-                    // Đảm bảo dữ liệu trả về là JSON
-                    const data = await response.json();
-    
-                    console.log('Phản hồi từ API:', data);
-    
-                    // Hiển thị lỗi cho từng trường nếu có
-                    if (data.name && data.name.length > 0) {
-                        document.getElementById('nameError').textContent = data.name[0];
-                        document.getElementById('nameError').classList.remove('hidden');
-                    }
-    
-                    if (data.email && data.email.length > 0) {
-                        document.getElementById('emailError').textContent = data.email[0];
-                        document.getElementById('emailError').classList.remove('hidden');
-                    }
-    
-                    if (data.password && data.password.length > 0) {
-                        document.getElementById('passwordError').textContent = data.password[0];
-                        document.getElementById('passwordError').classList.remove('hidden');
-                    }
-    
-                    return; // Dừng lại nếu có lỗi
-                }
-    
-                // Đăng ký thành công
-                const data = await response.json();
-                console.log('Đăng ký thành công:', data);
-    
-                // Chuyển hướng đến trang thành công
-                window.location.href = '/page/landing';
-    
-            } catch (error) {
-                console.error('Lỗi khi đăng ký:', error);
-    
-                // Hiển thị thông báo lỗi chung cho người dùng
-                document.getElementById('errorMessage').textContent = 'Đã có lỗi xảy ra. Vui lòng thử lại sau!';
-                document.getElementById('errorMessage').classList.remove('hidden');
-            }
-        });
-    </script> -->
-    
     <script>
         document.querySelector('form').addEventListener('submit', async (event) => {
             event.preventDefault(); // Ngăn hành động submit mặc định của form
@@ -190,8 +113,6 @@
                 if (!response.ok) {
                     // Đảm bảo dữ liệu trả về là JSON
                     const data = await response.json();
-    
-                    console.log('Phản hồi từ API:', data);
     
                     // Hiển thị lỗi cho từng trường nếu có
                     if (data.name && data.name.length > 0) {

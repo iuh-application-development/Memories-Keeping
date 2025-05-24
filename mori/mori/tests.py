@@ -1,22 +1,3 @@
-# from django.test import TestCase
-
-# Create your tests here.
-
-
-# {
-#     "user_id": 1,
-# 	"albums": [
-#         {
-#             "title": "Holiday Album",
-#             "description": "Photos from my holiday trip."
-#         },
-#         {
-#             "title": "Holiday Album",
-#             "description": "Photos from my holiday trip."
-#         }
-#     ]
-# }
-
 import os
 from pathlib import Path
 from datetime import timedelta

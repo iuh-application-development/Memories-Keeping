@@ -7,7 +7,7 @@ from allauth.account.signals import user_logged_in
 @receiver(post_save, sender=User)
 def create_user_album(sender, instance, created, **kwargs):
     if created:
-        Album.objects.create(user=instance, title=f'Tất cả', is_main=True)
+        Album.objects.create(user=instance, title='Tất cả', is_main=True)
         Avatar.objects.create(user=instance)
 
 @receiver(user_logged_in)

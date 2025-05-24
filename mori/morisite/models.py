@@ -110,7 +110,7 @@ class Trash(models.Model):
     id_trash = models.AutoField(primary_key=True)
     photo = models.ForeignKey('Photo', on_delete=models.CASCADE, related_name='trash_photo', blank=False, default=None, null=True)
     user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='trash_user', blank=False, default=None)
-    deleted_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -211,6 +211,7 @@ class Notification(models.Model):
         ('like_photo', 'Like Photo'),
         ('like_comment', 'Like Comment'),
         ('comment_photo', 'Comment Photo'),
+        ('reply_comment', 'Reply Comment'),
     ]
 
     id_notification = models.AutoField(primary_key=True)
@@ -227,32 +228,3 @@ class Notification(models.Model):
 
     def __str__(self):
         return f'{self.sender.name} -> {self.recipient.name}: {self.notif_type}'
-
-# class Search_rating(models.Model):
-#     id_search_rating = models.AutoField(primary_key=True)
-#     rating = models.IntegerField(blank=False)
-#     feedback = models.TextField(blank=True)
-#     # search_history = models.ForeignKey('Search_history', on_delete=models.CASCADE, related_name='search_rating_history', blank= False, default=None, null= False)
-#     search_history = models.OneToOneField('Search_history', on_delete=models.CASCADE, related_name='search_rating_history', blank=False, default=None, null=False)
-#     # photo = models.ForeignKey('Photo', on_delete=models.CASCADE, related_name='rating_photo', blank=False, default=None, null=False)
-#     photo = models.ManyToManyField('Photo', related_name='rating_photo', blank=False, default=None, null=False)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     class Meta:
-#         ordering = ['id_search_rating']
-    
-#     def __str__(self):
-#         return 'search_rating ' + str(self.id_search_rating)
-    
-# class Filter(models.Model):
-#     id_filter = models.AutoField(primary_key=True)
-#     name = models.CharField(max_length=255, blank=False, default='')
-#     updated_at = models.DateTimeField(auto_now=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     class Meta:
-#         ordering = ['id_filter']
-
-#     def __str__(self):
-#         return 'filter' + str(self.id_filter)   

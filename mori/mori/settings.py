@@ -96,24 +96,24 @@ WSGI_APPLICATION = "mori.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # sqlite3
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
-# postgresql with docker 
 # DATABASES = {
 #     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": os.getenv("POSTGRES_DB"),
-#         "USER": os.getenv("POSTGRES_USER"),
-#         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-#         "HOST": os.getenv("POSTGRES_HOST"),
-#         "PORT": os.getenv("POSTGRES_PORT"),
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
+
+# postgresql with docker 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_DB"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "HOST": os.getenv("POSTGRES_HOST"),
+        "PORT": os.getenv("POSTGRES_PORT"),
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -170,8 +170,6 @@ REST_FRAMEWORK = {
     ),
     'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
     'TIME_ZONE': 'Asia/Ho_Chi_Minh'
-    # 'DEFAULT_PERMISSION_CLASSES':
-    #     ('rest_framework.permissions.IsAuthenticatedOrReadOnly',),
 }
 
 CORS_ALLOW_CREDENTIALS = True
@@ -235,7 +233,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-email_host_noti = os.getenv("EMAIL_HOST_USER")
+email_host_noti = os.getenv("EMAIL_HOST_USER")  
 email_key_host_applicatoin = os.getenv("EMAIL_HOST_KEY_APPLICATON")
 
 SOCIALACCOUNT_ADAPTER = "morisite.adapters.CustomSocialAccountAdapter"

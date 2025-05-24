@@ -66,7 +66,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 5px;
+    /* gap: 5px; */
   }
 
   .comment-body span {
@@ -78,6 +78,8 @@
     font-size: 0.6rem !important;
     color: #999;
     margin-top: 2px;
+    flex: 1;
+    text-align: left;
 }
 
   .comment-form {
@@ -85,6 +87,24 @@
     justify-content: space-between;
   }
   
+  .btn-reply {
+    background-color: transparent;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: underline;
+  }
+
+  .btn-delete {
+    background-color: transparent;
+    border: none;
+    color: #ff0000;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: underline;
+  }
+
   .comment {
     display: flex;
     align-items: center;
@@ -188,5 +208,134 @@
     border-radius: 50% !important;
 }
   
+/* Add these styles to your social.css file */
+
+/* Comment styling */
+.comment {
+  display: flex;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.comment-body {
+  background-color: #f0f2f5;
+  border-radius: 18px;
+  padding: 8px 12px;
+  margin-left: 8px;
+  flex-wrap: wrap;
+  /* flex: 1; */
+}
+
+.comment-body h6 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  font-size: 12px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.img-chat-comment {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment h6 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.comment span {
+  font-size: 14px;
+  margin: 4px 0 !important;
+  width: 100%;
+  display: flex !important;
+  justify-content: flex-start;
+}
+
+.comment-date {
+  font-size: 12px !important;
+  color: #65676B;
+  margin: 0;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.comment-actions a {
+  color: #65676B;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.comment-actions a:hover {
+  text-decoration: underline;
+}
+
+/* Reply form styling */
+.reply-form-container {
+  margin-top: 8px;
+  margin-left: 40px;
+}
+
+.reply-form {
+  display: flex;
+  align-items: flex-start; /* căn trái */
+  gap: 6px;
+  margin-top: 6px;
+  width: 100%;
+
+}
+
+.reply-form input {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 0;
+  background: transparent !important;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  outline: none !important;
+  box-shadow: none !important;   /* Ngăn đổ bóng */
+}
+
+/* Ngăn hiệu ứng khi focus */
+.reply-form input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: #ccc !important; /* Không đổi màu khi focus */
+}
+.reply-form button {
+  padding: 5px 10px;
+  font-size: 13px;
+  background-color: transparent ;
+  margin-left: -10px;
+  color: #010101;
+  border: none !important;
+}
+
+.replies-container {
+  margin-left: 15px;
+  margin-top: 8px;
+}
+
+/* Nested replies should have smaller margins */
+.replies-container .comment {
+  margin-bottom: 6px;
+}
+
+.replies-container .img-chat-comment {
+  width: 24px;
+  height: 24px;
+}
 
   /* Các style khác như cũ... */
+

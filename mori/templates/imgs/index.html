@@ -112,6 +112,14 @@ Dashboard - MORI
                 const card = document.createElement('div');
                 card.classList.add('col-xl-3', 'col-md-4', 'col-sm-6', 'p-2', 'item-img');
 
+                let imagePath = photo.photo;
+
+                // Check if /store/ is already in the path
+                if (!imagePath.includes('/store/')) {
+                // Add /store/ to the beginning of the path (or adjust as needed)
+                imagePath = '/store/' + imagePath;
+                }
+
                 card.innerHTML = `
                     <div class="design-card" 
                                 data-photo-id="${photo.id_photo}" 
@@ -119,7 +127,7 @@ Dashboard - MORI
                                 data-is-public="${photo.is_public}"
                                 data-is-favorite="${photo.is_favorited}"
                             >
-                                <img src="/store/${photo.photo}" alt="Design">
+                                <img src="${imagePath}" alt="Design">
                                 <div class="hover-overlay d-flex justify-content-center align-items-end">
                                     {% comment %} <button class="btn btn-like">
                                         ${photo.is_favorited ? '<i class="fas fa-heart red-heart"></i>' : '<i class="far fa-heart"></i>'}
@@ -464,67 +472,73 @@ Dashboard - MORI
                     const photoCard = event.target.closest('.design-card');
                     const photoId = photoCard.getAttribute("data-photo-id");
                     const albumId = photoCard.getAttribute("data-album-id");
-
+                    
+                    // Find the card title and text related to this specific photo
+                    const cardContainer = photoCard.closest('.item-img');
+                    const cardTitle = cardContainer.querySelector(".card-title");
+                    const cardText = cardContainer.querySelector(".card-text");
+                    
                     if (!photoId) {
                         console.error("Photo ID not found.");
                         return;
                     }
-
+                
                     // Lưu giá trị photoId, albumId vào modal để sử dụng sau
                     const editModal = document.getElementById("editInfoModal");
                     editModal.dataset.photoId = photoId;
                     editModal.dataset.albumId = albumId;
-
+                
+                    // Get current data from the clicked card
+                    document.getElementById("inputName").value = cardTitle ? cardTitle.textContent || "" : "";
+                    document.getElementById("inputCaption").value = cardText ? cardText.textContent || "" : "";
+                    document.getElementById("inputDescription").value = ""; // Reset description field
+                
                     // Hiển thị modal bằng Bootstrap Modal API
                     const bsModal = new bootstrap.Modal(editModal);
                     bsModal.show();
-
+                
                     // Đăng ký sự kiện cho nút "Lưu thay đổi" trong modal, chỉ thực hiện 1 lần
-                    document.getElementById("saveChangesBtn").addEventListener("click",
-                        function handler() {
-                            const nameValue = document.getElementById("inputName").value;
-                            const captionValue = document.getElementById("inputCaption").value;
-                            const descriptionValue = document.getElementById("inputDescription")
-                                .value;
-
-                            // Tạo dữ liệu JSON theo định dạng yêu cầu
-                            const data = [{
-                                "id_photo": parseInt(photoId, 10),
-                                "album": parseInt(albumId, 10),
-                                "name": nameValue,
-                                "caption": captionValue,
-                                "description": descriptionValue
-                            }];
-
-                            fetch("/photo/info/", {
-                                    method: "PUT",
-                                    headers: {
-                                        "accept": "application/json",
-                                        'Authorization': `Token ${localStorage.getItem('token')}`,
-
-                                        "Content-Type": "application/json",
-                                    },
-                                    body: JSON.stringify(data)
-                                })
-                                .then(response => {
-                                    if (!response.ok) {
-                                        throw new Error("Network response was not ok");
-                                    }
-                                    return response.json();
-                                })
-                                .then(json => {
-                                    console.log("Success:", json);
-                                    bsModal.hide();
-                                })
-                                .catch(error => {
-                                    console.error("Error:", error);
-                                });
-
-                            // Xóa sự kiện sau khi đã thực hiện để tránh lặp lại khi mở modal lần sau
-                            this.removeEventListener("click", handler);
-                        }, {
-                            once: true
-                        });
+                    document.getElementById("saveChangesBtn").addEventListener("click", function handler() {
+                        const nameValue = document.getElementById("inputName").value;
+                        const captionValue = document.getElementById("inputCaption").value;
+                        const descriptionValue = document.getElementById("inputDescription").value;
+                
+                        // Tạo dữ liệu JSON theo định dạng yêu cầu
+                        const data = [{
+                            id_photo: parseInt(photoId, 10),
+                            album: parseInt(albumId, 10),
+                            ...(nameValue ? { name: nameValue } : {}),
+                            ...(captionValue ? { caption: captionValue } : {}),
+                            ...(descriptionValue ? { description: descriptionValue } : {})
+                        }];
+                        
+                        fetch("/photo/info/", {
+                                method: "PUT",
+                                headers: {
+                                    "accept": "application/json",
+                                    'Authorization': `Token ${localStorage.getItem('token')}`,
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(data)
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error("Network response was not ok");
+                                }
+                                return response.json();
+                            })
+                            .then(json => {
+                                console.log("Success:", json);
+                                bsModal.hide();
+                                window.location.reload();
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                            });
+                
+                        // Xóa sự kiện sau khi đã thực hiện để tránh lặp lại khi mở modal lần sau
+                        this.removeEventListener("click", handler);
+                    }, { once: true });
                 }
             });
 

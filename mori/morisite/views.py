@@ -1,33 +1,27 @@
 import os
 import logging
-from pathlib import Path
 from .models import *
 from .serializers import *
-from knox.models import AuthToken
-from knox.views import LoginView as KnoxLoginView 
-from django.conf import settings
-from django.http import Http404
-from django.contrib.auth import get_user_model, login
-from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg.openapi import TYPE_OBJECT, TYPE_STRING, TYPE_ARRAY
-from rest_framework import permissions, status
+from datetime import datetime
+from django.http import Http404
+from knox.models import AuthToken
 from rest_framework.views import APIView
+from drf_yasg.views import get_schema_view
 from rest_framework.response import Response
-from rest_framework.authtoken.serializers import AuthTokenSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import JSONParser
-from rest_framework.parsers import MultiPartParser, FormParser
-from django.core.mail import send_mail
-from django.conf import settings
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import permissions, status
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-# AI
-# from .utils import translate_text
-# from .faiss_indexer import FaissImageIndexer
-# indexer = FaissImageIndexer()
+from knox.views import LoginView as KnoxLoginView 
+from drf_yasg.openapi import TYPE_STRING, TYPE_ARRAY
+from django.contrib.auth import get_user_model, login
+from rest_framework.decorators import permission_classes
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+
 logger = logging.getLogger(__name__)
 User = get_user_model()
 schema_view = get_schema_view(
@@ -137,8 +131,6 @@ class LoginView(KnoxLoginView):
             
             if data.is_email:
                 return Response({"error": "Tài khoản này chỉ đăng nhập bằng google."}, status=status.HTTP_400_BAD_REQUEST)
-            # if not data.email.endswith('@gmail.com'):
-            #     return Response({"error": "Tài khoản chỉ hỗ trợ đăng nhập bằng gmail."}, status=status.HTTP_400_BAD_REQUEST)
             serializer = AuthTokenSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             user = serializer.validated_data['user']
@@ -445,7 +437,6 @@ class AlbumDetailView(APIView):
                 required=True
             )
         ],
-        # request_body=AlbumUpdateSerializer(many=True),
         responses={
             200: openapi.Response(description="Cập nhật thành công", schema=AlbumUpdateSerializer),
             404: openapi.Response(description="Album không tồn tại"),
@@ -470,7 +461,6 @@ class AlbumALLSerializer(serializers.ModelSerializer):
             'title': {'required': True},
             'description': {'required': False},
             'user': {'required': True},
-            # 'photos': {'required': False},
             'created_at': {'required': False},
             'updated_at': {'required': False},
             'count': {'required': False},
@@ -928,6 +918,21 @@ class SearchPhoto(APIView):
         search_text = request.data.get('search_text', '')
         user = request.user
         list_search_history = Photo.objects.filter(name__icontains=search_text, album__user=user)
+        liked_images = [
+            {
+                **photo,
+                'created_at': photo['created_at'].isoformat() if isinstance(photo['created_at'], datetime) else photo['created_at'],
+                'updated_at': photo['updated_at'].isoformat() if isinstance(photo['updated_at'], datetime) else photo['updated_at'],
+            }
+            for photo in PhotoInviCommunitySerializer(list_search_history, many=True).data
+        ]
+        Search_history.objects.create(
+            search_query=search_text,
+            search_type='normal',
+            user=user,
+            search_date=timezone.now(),
+            liked_images=liked_images
+        )
         serializer = PhotoAblumSerializer(list_search_history, many=True)
         return Response(serializer.data)
 
@@ -1010,7 +1015,6 @@ class RandomPulicUserPhotoListView(APIView):
             return Response(result, status=status.HTTP_200_OK)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-# Avatar
 class AvatarView(APIView):
     permission_classes = [IsAuthenticated]
     @swagger_auto_schema(
@@ -1138,8 +1142,6 @@ class PhotoPutView(APIView):
             return Photo.objects.get(album__user=user, id_photo=pk, is_deleted=False)
         except Photo.DoesNotExist:
             return None
-        # NotFound({"detail": "Photo not found or access denied"})
-
     permission_classes = [IsAuthenticated]  
     @swagger_auto_schema(
         operation_description="Upload avatar cho người dùng",
@@ -1204,10 +1206,8 @@ class PhotoInfoView(APIView):
                 },
                 status=status.HTTP_200_OK
             )
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
 class PhotoDeleteListView(APIView):
     def get_object(self, pk, user):
         try:
@@ -1239,7 +1239,6 @@ class PhotoDeleteListView(APIView):
         already_deleted_photos = []
         not_found_photos = []
         not_owned_photos = []
-        # trash, _ = Trash.objects.get_or_create(user=user)
         for pk in request.data['photos']:
             photo = self.get_object(pk, user)
             if photo == "already_deleted":
@@ -1251,7 +1250,6 @@ class PhotoDeleteListView(APIView):
             if photo:
                 photo.is_deleted = True
                 photo.updated_at = timezone.now()
-                # trash.photo.add(photo)
                 trash = Trash.objects.create(user=user, photo=photo)
                 trash.deleted_at = timezone.now()
                 photo.save()
@@ -1261,7 +1259,6 @@ class PhotoDeleteListView(APIView):
             else:
                 not_found_photos.append(pk)
         deleted_photos = [TrashSeriizer(trash).data for trash in deleted_photos]
-
         return Response(
             {
                 "Deleted photos": deleted_photos,  
@@ -1345,13 +1342,14 @@ class LikeView(APIView):
                     like = Like.objects.create(user=user, photo=photo)
                     likes.append(like)
                     messageSend = f'{user.name} đã thích ảnh của bạn'
-                    Notification.objects.create(recipient=photo.album.user,
-                                                        sender=user,
-                                                        notif_type='like_photo',
-                                                        photo=photo,
-                                                        comment=None,
-                                                        message=messageSend,
-                                                        created_at=timezone.now())
+                    if photo.album.user != user:
+                        Notification.objects.create(recipient=photo.album.user,
+                                                            sender=user,
+                                                            notif_type='like_photo',
+                                                            photo=photo,
+                                                            comment=None,
+                                                            message=messageSend,
+                                                            created_at=timezone.now())
                 else:
                     exited_likes.append(Like.objects.filter(user=user, photo=photo).first())
             else:
@@ -1383,7 +1381,6 @@ class LikeView(APIView):
     def delete(self, request):
         user = request.user
         not_found_photos = []
-        # like, _ = Like.objects.get_or_create(user=user)
         photo_unliked = []
         for pk in request.data['photos']:
             photo = self.get_object(pk)
@@ -1452,57 +1449,6 @@ class PhotoCommunityUserDetailView(APIView):
         photo = self.get_object(pk)
         serializer = PhotoDynamicUserSerializer(photo, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
-# class TranslateTextAPIView(APIView):
-#     permission_classes = [AllowAny]
-#     @swagger_auto_schema(
-#         operation_summary="Dịch văn bản",
-#         operation_description="Dịch văn bản từ bất kỳ ngôn ngữ nào sang ngôn ngữ đích (mặc định là Tiếng Anh).",
-#         manual_parameters=[
-#             openapi.Parameter(
-#                 name="text",
-#                 in_=openapi.IN_QUERY,
-#                 description="Văn bản cần dịch",
-#                 type=openapi.TYPE_STRING,
-#                 required=True
-#             ),
-#             openapi.Parameter(
-#                 name="to_lang",
-#                 in_=openapi.IN_QUERY,
-#                 description="Mã ngôn ngữ đích (ví dụ: 'en' cho Tiếng Anh, 'vi' cho Tiếng Việt)",
-#                 type=openapi.TYPE_STRING,
-#                 required=False,
-#                 default="en"
-#             ),
-#         ],
-#         responses={
-#             200: openapi.Response(
-#                 description="Kết quả dịch thành công",
-#                 examples={
-#                     "application/json": {
-#                         "translated_text": "Hello"
-#                     }
-#                 }
-#             ),
-#             400: openapi.Response(
-#                 description="Lỗi khi thiếu văn bản để dịch",
-#                 examples={
-#                     "application/json": {
-#                         "error": "Thiếu văn bản để dịch"
-#                     }
-#                 }
-#             ),
-#         }
-#     )
-#     def get(self, request):
-#         text = request.query_params.get("text")
-#         to_lang = request.query_params.get("to_lang", "en")
-
-#         if not text:
-#             return Response({"error": "Thiếu văn bản để dịch"}, status=400)
-
-#         translated_text = translate_text(text, to_lang)
-#         return Response({"translated_text": translated_text})
 
 class CommentView(APIView):
     permission_classes = [IsAuthenticated]
@@ -1597,7 +1543,6 @@ class CommentDeletedlView(APIView):
                 required=True
             )
         ],
-        # request_body=ListForm,
     )
     def delete(self, request, pk):
         user = request.user
@@ -1656,7 +1601,9 @@ class LikeCommentView(APIView):
             )
         messageSend = f'{user.name} đã thích bình luận của bạn'
         comment.increase_like(user)
-        # Comment.objects.create(user=user, photo=comment.photo, )
+        if comment.user == user:
+            serializer = LikeCommentSerializer(comment, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
         Notification.objects.create(recipient=comment.user,
                                            sender=user,
                                            notif_type='like_comment',
@@ -1780,6 +1727,20 @@ class NotificationDetailView(APIView):
         notification.delete()
         return Response({'message': 'Deleted notification'}, status=status.HTTP_202_ACCEPTED)
     
+class NotiPhotoDetailView(APIView):
+    def get_object(self, pk):
+        try:
+            return Photo.objects.get(id_photo=pk, is_public=True, is_deleted=False)
+        except Photo.DoesNotExist:
+            return None
+
+    def get(self, request, pk):
+        photo = self.get_object(pk)
+        if photo is None:
+            return Response({'error': 'Không tìm thấy bài viết'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = PhotoInviCommunitySerializer(photo, context={"hide_album_info": True}).data
+        return Response(serializer, status=status.HTTP_202_ACCEPTED)
+
 class ChangePasswordView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     @swagger_auto_schema(

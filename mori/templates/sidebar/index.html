@@ -322,7 +322,7 @@
                     card.setAttribute('data-type', item.search_type === 'image' ? 'find_ai' : 'find_normal');
                     
                     const cardHtml = `
-                        <img src="/store/${item.liked_images[0].photo}"
+                        <img src="${item.liked_images[0].photo}"
                             alt="Logo Mori" class="design-img">
                         <span class="design-name">${item.search_query}</span>
                     `;

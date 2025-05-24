@@ -79,7 +79,7 @@ Dashboard - MORI
                         card.setAttribute('data-type', item.search_type === 'image' ? 'find_ai' : 'find_normal');
                         
                         const cardHtml = `
-                            <img src="/store/${item.liked_images[0].photo}" alt="Image">
+                            <img src="${item.liked_images?.[0]?.photo}" alt="Image">
                             <div class="design-text">
                                 <h5>${item.search_query}</h5>
                                 <p>${item.search_date}</p>

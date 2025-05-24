@@ -10,14 +10,14 @@ if not exist "venv" (
 :: Kich hoat moi truong ao
 call venv\Scripts\activate
 
+:: Di chuyen vao thu muc mori
+cd Memories-Keeping/mori
+
 :: Kiem tra xem co file requirements.txt khong
 if exist "requirements.txt" (
     echo Cai dat cac thu vien Python...
     pip install -r requirements.txt
 )
-
-:: Di chuyen vao thu muc mori
-cd mori
 
 :: Chay migrations neu can
 echo Chay migrations...

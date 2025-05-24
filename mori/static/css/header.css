@@ -316,3 +316,7 @@
     color: #888;
     font-size: 12px;
 }
+
+.default_search_none {
+    color: black !important;
+}

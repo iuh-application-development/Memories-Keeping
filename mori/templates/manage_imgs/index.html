@@ -140,15 +140,15 @@ Quản lí ảnh - MORI
                 <div class="modal-body">
                     <form id="editInfoForm">
                         <div class="mb-1">
-                            <label for="inputName" class="form-label" style="color: black !important;">Name</label>
+                            <label for="inputName" class="form-label" style="color: black !important;">Tên ảnh</label>
                             <input type="text" class="form-control" id="inputName" placeholder="Nhập tên">
                         </div>
                         <div class="mb-1">
-                            <label for="inputCaption" class="form-label" style="color: black !important;">Caption</label>
+                            <label for="inputCaption" class="form-label" style="color: black !important;">Mô tả</label>
                             <input type="text" class="form-control" id="inputCaption" placeholder="Nhập caption">
                         </div>
                         <div class="mb-1">
-                            <label for="inputDescription" class="form-label" style="color: black !important;">Description</label>
+                            <label for="inputDescription" class="form-label" style="color: black !important;">Caption</label>
                             <textarea class="form-control" id="inputDescription" rows="3"
                                 placeholder="Nhập description"></textarea>
                         </div>
@@ -852,27 +852,37 @@ Quản lí ảnh - MORI
                 const photoCard = event.target.closest('.design-card');
                 const photoId = photoCard.getAttribute("data-photo-id");
                 const albumId = photoCard.getAttribute("data-album-id");
-
+                
+                // Find the card title and text related to this specific photo
+                const cardContainer = photoCard.closest('.item-img');
+                const cardTitle = cardContainer.querySelector(".card-title");
+                const cardText = cardContainer.querySelector(".card-text");
+                
                 if (!photoId) {
                     console.error("Photo ID not found.");
                     return;
                 }
-
+            
                 // Lưu giá trị photoId, albumId vào modal để sử dụng sau
                 const editModal = document.getElementById("editInfoModal");
                 editModal.dataset.photoId = photoId;
                 editModal.dataset.albumId = albumId;
-
+            
+                // Get current data from the clicked card
+                document.getElementById("inputName").value = cardTitle ? cardTitle.textContent || "" : "";
+                document.getElementById("inputCaption").value = cardText ? cardText.textContent || "" : "";
+                document.getElementById("inputDescription").value = ""; // Reset description field
+            
                 // Hiển thị modal bằng Bootstrap Modal API
                 const bsModal = new bootstrap.Modal(editModal);
                 bsModal.show();
-
+            
                 // Đăng ký sự kiện cho nút "Lưu thay đổi" trong modal, chỉ thực hiện 1 lần
                 document.getElementById("saveChangesBtn").addEventListener("click", function handler() {
                     const nameValue = document.getElementById("inputName").value;
                     const captionValue = document.getElementById("inputCaption").value;
                     const descriptionValue = document.getElementById("inputDescription").value;
-
+            
                     // Tạo dữ liệu JSON theo định dạng yêu cầu
                     const data = [{
                         id_photo: parseInt(photoId, 10),
@@ -882,13 +892,11 @@ Quản lí ảnh - MORI
                         ...(descriptionValue ? { description: descriptionValue } : {})
                     }];
                     
-
                     fetch("/photo/info/", {
                             method: "PUT",
                             headers: {
                                 "accept": "application/json",
                                 'Authorization': `Token ${localStorage.getItem('token')}`,
-
                                 "Content-Type": "application/json",
                             },
                             body: JSON.stringify(data)
@@ -897,23 +905,20 @@ Quản lí ảnh - MORI
                             if (!response.ok) {
                                 throw new Error("Network response was not ok");
                             }
-
-                            window.location.reload();
                             return response.json();
                         })
                         .then(json => {
                             console.log("Success:", json);
                             bsModal.hide();
+                            window.location.reload();
                         })
                         .catch(error => {
                             console.error("Error:", error);
                         });
-
+            
                     // Xóa sự kiện sau khi đã thực hiện để tránh lặp lại khi mở modal lần sau
                     this.removeEventListener("click", handler);
-                }, {
-                    once: true
-                });
+                }, { once: true });
             }
 
         });

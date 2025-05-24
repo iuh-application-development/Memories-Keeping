@@ -213,7 +213,6 @@ class GetUserAdminView(APIView):
         user = request.user
         if user.is_superuser == False:
             return Response({'error': 'Bạn không có quyền truy cập'}, status=status.HTTP_403_FORBIDDEN)
-        # users = User.objects.filter(is_superuser=False) 
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

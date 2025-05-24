@@ -80,6 +80,7 @@
                 if (data.avatar) {
                     // Update profile image
                     localStorage.setItem('avatar', data.avatar);
+                    localStorage.setItem('id_user', data.id_user);
                     document.querySelectorAll('#profile-avatar').forEach(img => img.src = data.avatar);
                 }
 

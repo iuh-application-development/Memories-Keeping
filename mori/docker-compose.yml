@@ -18,8 +18,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./mori/db_mori/data:/var/lib/postgresql/data
-      - ./mori/db_mori/schemas/mori.sql:/docker-entrypoint-initdb.d/mori.sql:ro
+      - ./db_mori/schema/mori.sql:/docker-entrypoint-initdb.d/mori.sql:ro
     restart: unless-stopped
     ports:
       - "5435:5432"
@@ -28,7 +27,19 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    
+      
+  trash_cron:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: trash_cron
+    depends_on:
+      - mori_db
+    command: >
+      sh -c "while true; do python manage.py moritrashauto && sleep 86400; done"
+    volumes:
+      - ./:/mori_super_search
+
 volumes:
   db_mori:
     driver: local

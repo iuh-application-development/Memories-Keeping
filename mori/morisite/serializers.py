@@ -1,26 +1,21 @@
 import os
-import random
 import time
-import asyncio
-from PIL import Image
-from django.db import transaction
-from io import BytesIO
-from asgiref.sync import sync_to_async
-from concurrent.futures import ThreadPoolExecutor
-from rest_framework import serializers
+import random
 from .models import *
-from rest_framework.exceptions import ValidationError, NotFound
-from django.shortcuts import get_object_or_404
-from rest_framework.response import Response
-from rest_framework import status
+from PIL import Image
+from io import BytesIO
+from django.db import transaction
 from django.utils import timezone
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.exceptions import ValidationError
-from django.core.validators import validate_email
-from django.contrib.auth import get_user_model
 from django.core.cache import cache
+from asgiref.sync import sync_to_async
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.exceptions import ValidationError
+
 # AI
-from .utils import translate_text
 from .faiss_indexer import FaissImageIndexer
 User = get_user_model()
 
@@ -206,7 +201,6 @@ class PhotoListSerializer(serializers.ListSerializer):
         return updated_photos, errors
 
 class PhotoListSerializerDemo(serializers.ModelSerializer):
-    # id_photo = serializers.IntegerField(required=True)  
     class Meta:
         model = Photo
         fields = ['name', 'location', 'caption', 'tags', 'colors', 'objects_photo', 'description', 'photo']
@@ -236,8 +230,6 @@ class PhotoBulkUpdateSerializer(PhotoSerializer):
     class Meta(PhotoSerializer.Meta):
         list_serializer_class = PhotoListSerializer
         
-
-
 class TrashSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trash
@@ -322,14 +314,26 @@ class CommentSerilizerDetail(serializers.Serializer):
 
         if validated_data.get('id_parent'):
             parent_comment = Comment.objects.get(id_comment=validated_data['id_parent'])
-
         comment = Comment.objects.create(
             user=user,
             photo=photo,
             parent_comment=parent_comment,
             content=validated_data['content']
         )
+        if parent_comment:
+            messageSend = f'{parent_comment.user.name} đã trả lời bình luận của bạn.'
+            Notification.objects.create(
+                recipient=parent_comment.user,
+                sender=user,
+                notif_type='reply_comment',
+                photo=comment.photo,
+                comment=comment,
+                message=messageSend,
+                created_at=timezone.now()
+            )            
         messageSend = f'{user.name} đã bình luận ảnh của bạn.'
+        if photo.album.user == user:
+            return comment
         Notification.objects.create(
             recipient=photo.album.user,
             sender=user,
@@ -393,7 +397,6 @@ class PhotoAblumSerializer(serializers.ModelSerializer):
         if avatar_instance and avatar_instance.avatar:
             return avatar_instance.avatar.url
         return None
-
 
 class AlbumSerializer(serializers.ModelSerializer):
     photos = PhotoAblumSerializer(many=True, read_only=True, source='photo_album')
@@ -618,7 +621,6 @@ class AlbumListSerializer(serializers.ListSerializer):
         }
 
 class AlbumCreateSerializer(serializers.ModelSerializer):
-    # id_album = serializers.IntegerField(required=False)
     class Meta:
         model = Album
         fields = ['id_album', 'title', 'description']
@@ -659,7 +661,6 @@ class AlbumUpdateSerializer(serializers.ModelSerializer):
 class AlbumBulkUpdateSerializer(AlbumUpdateSerializer):
     class Meta(AlbumUpdateSerializer.Meta):
         list_serializer_class = AlbumListSerializer
-
 
 class TrashActionSerializer(serializers.Serializer):
     photo_ids = serializers.ListField(
@@ -772,7 +773,6 @@ class UserForm(serializers.Serializer):
         allow_empty=False,
         help_text="List of User IDs to process"
     )
-    
     def perform_delete(self):
         request_user = self.context['request'].user
         deleted_ids = []
@@ -827,10 +827,11 @@ class UserSeachInfo(serializers.ModelSerializer):
 class PhotoCommunitySerializer(serializers.ModelSerializer):
     user = UserSeachInfo(read_only=True, source='album.user')
     photo = serializers.SerializerMethodField()
+    comments = CommentSerilizer(many=True, read_only=True, source="comment_photo")
     class Meta:
         model = Photo
         fields = ['id_photo', 'name', 'location', 'caption', 'tags', 
-                  'colors', 'objects_photo', 'description',  'like_count', 'photo','user','created_at','updated_at']
+                  'colors', 'objects_photo', 'description',  'like_count', 'photo', 'user', 'comments','created_at','updated_at']
         extra_kwargs = {
             'name': {'required': False},
             'location': {'required': False},
@@ -847,6 +848,29 @@ class PhotoCommunitySerializer(serializers.ModelSerializer):
     def get_photo(self, obj):
         return obj.photo.url
     
+class PhotoInviCommunitySerializer(serializers.ModelSerializer):
+    user = UserSeachInfo(read_only=True, source='album.user')
+    photo = serializers.SerializerMethodField()
+    comments = CommentSerilizer(many=True, read_only=True, source="comment_photo")
+    album_title = serializers.CharField(source='album.title', read_only=True)
+    album_description = serializers.CharField(source='album.description', read_only=True)
+    album_is_main = serializers.BooleanField(source='album.is_main', read_only=True)
+    class Meta:
+        model = Photo
+        fields = ['id_photo', 'name', 'location', 'caption', 'tags', 
+                  'colors', 'objects_photo', 'description',  'like_count', 'photo', 'user', 'album', 'album_title', 'album_description', 'album_is_main', 'comments','created_at','updated_at']
+    def get_photo(self, obj):
+        return obj.photo.url
+    
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        if self.context.get("hide_album_info", False):
+            rep.pop('album', None)
+            rep.pop('album_title', None)
+            rep.pop('album_description', None)
+            rep.pop('album_is_main', None)
+        return rep
+    
 class SearchHistorySerializer(serializers.ModelSerializer):
     user = UserSeachInfo(read_only=True)
 
@@ -860,7 +884,6 @@ class SearchHistorySerializer(serializers.ModelSerializer):
             'user': {'required': False},
             'search_date': {'required': False},
             'liked_images': {'required': False},
-            # 'rating': {'required': False},
         }
     
     def create(self, validated_data):
@@ -871,7 +894,6 @@ class SearchHistorySerializer(serializers.ModelSerializer):
 
 class SearchHistoryDetailSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-
     class Meta:
         model = Search_history
         fields = ['id_search_history', 'search_query', 'search_type', 'user', 'search_date', 'liked_images']
@@ -882,7 +904,6 @@ class SearchHistoryDetailSerializer(serializers.ModelSerializer):
             'user': {'required': True},
             'search_date': {'required': False},
             'liked_images': {'required': False},
-            # 'rating_data': {'required': False},
         }
 
     def validate_user(self, user):
@@ -963,7 +984,6 @@ class PhotoDynamicUserSerializer(serializers.ModelSerializer):
 class RandomPhotoUserListSerializer(serializers.Serializer):
     PAGE_SIZE = 15
     CACHE_TIMEOUT = 300
-    
     photos = serializers.SerializerMethodField()
 
     def get_obj(self, obj):
@@ -1152,7 +1172,7 @@ class PhotoDynamicSerializer(serializers.ModelSerializer):
     comments = CommentSerilizer(many=True, read_only=True, source="comment_photo")
     class Meta:
         model = Photo
-        fields = ['id_photo', 'name', 'location', 'caption', 'tags', 'colors', 'like_count', 'objects_photo', 'description', 'is_public', 'uploaded_by', 'photo_path', 'comments', 'created_at', 'updated_at']   
+        fields = ['id_photo', 'name', 'location', 'caption', 'tags', 'colors', 'like_count', 'objects_photo', 'description', 'like_count', 'is_public', 'uploaded_by', 'photo_path', 'comments', 'created_at', 'updated_at']   
     def get_photo_path(self, obj):
         return obj.photo.url
 
@@ -1206,7 +1226,6 @@ class PhotoDynamicNotiSerializer(serializers.ModelSerializer):
         return obj.photo.url
 class CommentNotiSerilizer(serializers.ModelSerializer):
     user = UserSerializerPublic(read_only=True)
-    # photo = PhotoSerializer(read_only=True)
     class Meta:
         model = Comment
         fields = ['id_comment', 'user', 'photo',  'content', 'parent_comment','created_at', 'updated_at']
@@ -1257,7 +1276,6 @@ class LikeSerializer(serializers.ModelSerializer):
 class LikeCommentSerializer(serializers.ModelSerializer):
     is_liked = serializers.SerializerMethodField()
     parent_comment = CommentNotiSerilizer(read_only=True)
-    # user_comment = UserSerializerPublic(read_only=True)
     user_comment = serializers.SerializerMethodField()
     liked_by = serializers.SerializerMethodField()
     class Meta:
