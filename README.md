@@ -1,141 +1,29 @@
 # Memories-Keeping
 
-## Giới thiệu
+## Mô tả đề tài
+### Mô tả tổng quan
 
-**Memories-Keeping** là một ứng dụng web được xây dựng với Django, cho phép người dùng lưu trữ kỷ niệm dưới dạng hình ảnh và ghi chú theo sự kiện hoặc thời gian. Ứng dụng hỗ trợ:
+Trong cuộc sống hiện đại, nhu cầu lưu giữ và chia sẻ những khoảnh khắc ý nghĩa ngày càng trở nên thiết yếu. 
 
-- Phân loại kỷ niệm theo thời gian, địa điểm, từ khóa
-- Tìm kiếm ảnh bằng AI (FAISS)
-- Chia sẻ và tương tác như một mạng xã hội thu nhỏ (blog cá nhân, bình luận, tương tác với mọi người)
-- Đăng nhập bằng Google OAuth
+Tuy nhiên, việc quản lý và truy xuất các kỷ niệm (dưới dạng ảnh, văn bản) thường gặp khó khăn do thiếu công cụ hỗ trợ hiệu quả, thông minh và cá nhân hóa. Đề tài “Xây dựng ứng dụng website giúp mọi người lưu giữ kỷ niệm” ra đời nhằm giải quyết vấn đề đó bằng cách phát triển một nền tảng web thân thiện, hiện đại và tích hợp công nghệ AI.
 
-Ứng dụng hướng tới trải nghiệm lưu giữ, chia sẻ và hồi tưởng kỷ niệm một cách hiện đại, thông minh và tiện lợi.
+Ý tưởng chính là xây dựng một hệ thống cho phép người dùng lưu trữ, tổ chức, tìm kiếm và tương tác với các kỷ niệm của mình thông qua hình ảnh và mô tả văn bản. Ứng dụng sử dụng mô hình học sâu OpenCLIP (ViT-L-14) để trích xuất đặc trưng từ ảnh và văn bản, kết hợp với FAISS nhằm tìm kiếm các ảnh tương đồng một cách nhanh chóng. Hệ thống còn hỗ trợ các tính năng cộng đồng như thích, bình luận, chia sẻ, đồng thời đảm bảo bảo mật với Knox token và hỗ trợ đăng nhập qua Google OAuth.
 
-## Thông tin nhóm phát triển
+Lý do chọn đề tài xuất phát từ thực tiễn rằng hầu hết các nền tảng chia sẻ hiện nay đều thiên về mạng xã hội chung chung, thiếu đi khả năng tổ chức và truy xuất các kỷ niệm theo ngữ cảnh cá nhân hóa. Đề tài kỳ vọng sẽ góp phần lấp đầy khoảng trống này bằng một giải pháp vừa tiện ích vừa thông minh.
+
+### Mục tiêu
+Đề tài hướng đến các mục tiêu cụ thể sau:
+- Xây dựng một nền tảng web cho phép người dùng lưu trữ, quản lý và chia sẻ các khoảnh khắc cá nhân một cách trực quan, hiệu quả.
+- Tích hợp mô hình AI OpenCLIP để trích xuất đặc trưng ảnh và văn bản, đồng thời sử dụng FAISS cho tìm kiếm ảnh thông minh bằng văn bản hoặc ảnh tương tự.
+- Phát triển giao diện người dùng thân thiện, hỗ trợ đầy đủ chức năng như quản lý ảnh, album, thùng rác, lịch sử tìm kiếm và tương tác cộng đồng (like, comment).
+- Áp dụng các cơ chế xác thực bảo mật (Knox Token, OAuth 2.0), đảm bảo an toàn và quyền riêng tư cho người dùng.
+- Xây dựng hệ thống phân quyền và quản trị nội dung giúp admin giám sát và điều phối nền tảng hiệu quả.
+
+
+## Thông tin nhóm
 
 - Trần Xuân Diện – MSSV: 22650601  
 - Nguyễn Đăng Tuấn Huy – MSSV: 22658341
-
-## Công nghệ sử dụng
-
-### Backend
-
-**Framework và thư viện chính:**
-
-- Django: Web framework chính
-- Django Rest Framework (DRF): Tạo API RESTful
-- Django Allauth: Xác thực và đăng nhập Google OAuth
-- Knox: Token-based authentication
-
-**Thư viện hỗ trợ:**
-
-- FAISS: Tìm kiếm vector nhanh, hỗ trợ AI trong tìm kiếm ảnh
-- OpenCLIP: Mô hình AI dùng để mã hóa ảnh và văn bản thành vector, phục vụ tìm kiếm hình ảnh bằng từ khóa (semantic search)
-- deep-translator: Dịch tự động từ tiếng Việt sang tiếng Anh giúp cải thiện độ chính xác trong việc tìm kiếm ảnh bằng ngôn ngữ tự nhiên
-- python-dotenv: Quản lý biến môi trường
-- django-cors-headers: Xử lý CORS
-
-**Email:**
-
-- Sử dụng Gmail SMTP (`django.core.mail.backends.smtp.EmailBackend`) để gửi email
-
-### Frontend
-
-- HTML
-- CSS
-- JavaScript
-
-## Chức năng chính
-
-## 1. Xác Thực và Phân Quyền Người Dùng
-
-- Cho phép người dùng đăng ký và đăng nhập bằng email và mật khẩu.
-- Bảo mật xác thực bằng mã thông báo (token) sử dụng Knox.
-- Hỗ trợ chức năng thay đổi mật khẩu.
-- Quản lý và chỉnh sửa hồ sơ người dùng.
-
-### Phân quyền:
-
-- **Quản trị viên (Admin):**
-  - Truy cập trang quản trị hệ thống.
-  - Quản lý người dùng, bài đăng, và nội dung công khai.
-  - Xem thống kê toàn hệ thống.
-  
-- **Người dùng thông thường:**
-  - Quản lý dữ liệu cá nhân và ảnh của chính mình.
-
-
-## 2. Quản Lý Ảnh
-
-- Cho phép tải lên và lưu trữ ảnh cá nhân.
-- Hỗ trợ ảnh công khai và ảnh riêng tư.
-- Chỉnh sửa thông tin ảnh bao gồm chú thích, thẻ, mô tả.
-- Tính năng thùng rác cho phép khôi phục ảnh đã xóa.
-
-### Quản lý Album:
-
-- Tạo mới, chỉnh sửa, xóa album.
-- Di chuyển ảnh giữa các album.
-- Mỗi người dùng có album mặc định.
-- Quản lý siêu dữ liệu của album.
-
-### Phân quyền ảnh:
-
-- **Người dùng thông thường:** Chỉ có thể quản lý ảnh của mình.
-- **Quản trị viên:** Có thể truy cập và quản lý tất cả ảnh công khai, bao gồm việc ẩn ảnh không phù hợp.
-
-
-## 3. Tìm Kiếm Ảnh
-
-- **Tìm kiếm cơ bản:** Tìm theo tên ảnh.
-- **Tìm kiếm bằng AI:**
-  - Tìm ảnh bằng mô tả văn bản tự nhiên.
-  - Tìm kiếm ảnh tương tự dựa trên nhúng vector.
-  - Sử dụng OpenCLIP để tạo vector nhúng.
-  - Tìm kiếm hiệu quả với chỉ mục FAISS.
-
-
-## 4. Tính Năng Mạng Xã Hội
-
-- Người dùng có thể thích hoặc bỏ thích ảnh.
-- Bình luận trên ảnh công khai.
-- Hệ thống thông báo khi có tương tác (thích, bình luận).
-  
-### Phân quyền tương tác:
-
-- **Người dùng thông thường:** Chỉ có thể tương tác với ảnh công khai.
-- **Quản trị viên:** Có quyền quản lý việc xóa nội dung không phù hợp.
-
-
-## 5. Theo Dõi Lịch Sử Tìm Kiếm
-
-- Ghi lại truy vấn tìm kiếm của người dùng.
-- Cho phép người dùng xem và xóa lịch sử tìm kiếm.
-
-
-## 6. Quản Lý Hồ Sơ Người Dùng
-
-- Tải lên và quản lý ảnh đại diện.
-- Chỉnh sửa thông tin hồ sơ cá nhân.
-- Xem hồ sơ của chính mình hoặc người dùng khác (nếu có quyền).
-
-### Phân quyền hồ sơ:
-
-- **Người dùng thông thường:** Chỉ được chỉnh sửa hồ sơ của mình.
-- **Quản trị viên:** Có thể truy cập và chỉnh sửa hồ sơ của bất kỳ người dùng nào, bao gồm việc thay đổi quyền hạn.
-
-## 7. Hệ Thống Thông Báo
-
-- Gửi thông báo thời gian thực khi có lượt thích hoặc bình luận.
-- Hiển thị danh sách thông báo cho người dùng.
- 
-
-## 8. Quản Trị Viên
-
-- Tạo, xoá, phân quyền tài khoản người dùng.
-- Quản lý ảnh và bài đăng công khai.
-- Xem thống kê hệ thống bao gồm ảnh, lượt thích, bình luận và thông báo.
-
 
 ## Hướng dẫn cài đặt và chạy ứng dụng
 
@@ -181,3 +69,8 @@ python manage.py runserver
 
 Mở trình duyệt và truy cập:  
 [http://localhost:8000](http://localhost:8000)
+
+## Link video
+- Link video sẽ được cập nhật trong thời gian tới.
+
+## Screenshots
