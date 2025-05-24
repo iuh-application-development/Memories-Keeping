@@ -70,7 +70,23 @@ python manage.py runserver
 Mở trình duyệt và truy cập:  
 [http://localhost:8000](http://localhost:8000)
 
+## Hướng dẫn chạy docker
+```bash
+docker compose down -v
+docker volume prune -f 
+docker compose up -d --build
+```
+
 ## Link video
 - Link video sẽ được cập nhật trong thời gian tới.
 
 ## Screenshots
+1. Các giao diện chính: đăng nhập, đăng ký, landing page, quên mật khẩu
+
+2. Tổng quan trang chủ:
+3. Quản lý ảnh
+4. Quản lý album
+5. Quản lý thùng rác
+6. Tìm kiếm thông thường/AI, quản lý lịch sử tìm kiếm
+7. Tương tác cộng đồng (thích, bình luận, thông báo)
+8. Quản lý thông tin chung 
