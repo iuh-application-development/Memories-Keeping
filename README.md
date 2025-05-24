@@ -92,6 +92,11 @@ docker compose up -d --build
 
 ---
 
+## Video demo
+- Link video sẽ được cập nhật trong thời gian tới.
+
+---
+
 ## Screenshots
 
 ### 1. Các giao diện chính: Đăng nhập, Đăng ký, Landing Page, Quên mật khẩu, Trang cá nhân
