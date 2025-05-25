@@ -93,16 +93,7 @@ docker compose up -d --build
 ---
 
 ## Video demo
-
-<!DOCTYPE html>
-<html>
-<head><title>Video Demo</title></head>
-<body>
-  <h2>Video Demo</h2>
-  <iframe src="https://drive.google.com/file/d/1xKW6zavxTEIUd-rkQS5jsknred9Oofzd/preview"
-          width="640" height="360" allow="autoplay" allowfullscreen></iframe>
-</body>
-</html>
+- Xem video demo ứng dụng tại: [Video Demo](https://drive.google.com/file/d/1xKW6zavxTEIUd-rkQS5jsknred9Oofzd/view?usp=sharing)
 
 ---
 
