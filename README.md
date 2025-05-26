@@ -93,7 +93,7 @@ docker compose up -d --build
 ---
 
 ## Video demo
-- Xem video demo ứng dụng tại: [Video Demo](https://drive.google.com/file/d/1xKW6zavxTEIUd-rkQS5jsknred9Oofzd/view?usp=sharing)
+- Xem video demo ứng dụng tại: [Video Demo](https://drive.google.com/file/d/1Na6xqTnkFOgA56y_bOgjq7zBqYWO2WbP/view?usp=sharing)
 
 ---
 
