@@ -1,4 +1,5 @@
 services:
+# Test trường hợp chạy local mở comment để chạy docker 
   mori_search:
     build:
       context: .
@@ -27,7 +28,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      
+# Test trường hợp chạy local mở comment để chạy docker 
   trash_cron:
     build:
       context: .
@@ -39,6 +40,8 @@ services:
       sh -c "while true; do python manage.py moritrashauto && sleep 86400; done"
     volumes:
       - ./:/mori_super_search
+
+  
 
 volumes:
   db_mori:
